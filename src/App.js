@@ -12,7 +12,7 @@ export default function App () {
   const [ newTask, setNewTask ] = useState('')
   const [ isInvalid, setIsInvalid ] = useState(false)
 
-  const handlePressEnter = e => {
+  const handleSubmit = e => {
     e.preventDefault();
     if(newTask){
       let auxTasks = [...tasks]
@@ -30,13 +30,13 @@ export default function App () {
     }
   }
 
-  const handleSubmitTask = index => {
+  const handleCheckTask = index => {
     let auxTasks = [...tasks]
     auxTasks[index].done = !auxTasks[index].done;
     setTasks(auxTasks)
   }
 
-  const handlePressTask = (e, id)=> {
+  const handleDeleteTask = (e, id)=> {
     e.stopPropagation();
     setTasks(tasks.filter( item => item.id !== id))
   }
@@ -47,13 +47,13 @@ export default function App () {
         <h3>Por hacer:</h3>
         <ul className="todo">
           { tasks.map((task, index) =>
-            <li key={task.id} onClick={() => handleSubmitTask(index)} className={ task.done ? "done" : null }>
+            <li key={task.id} onClick={() => handleCheckTask(index)} className={ task.done ? "done" : null }>
               {task.name}
-              <a onClick={e => handlePressTask(e, task.id)}>x</a>
+              <a onClick={e => handleDeleteTask(e, task.id)}>x</a>
             </li>
           )}
         </ul>
-        <form onSubmit={handlePressEnter}>
+        <form onSubmit={handleSubmit}>
           <input type="text" id="new-task"
             placeholder="Ingresa una tarea y oprime Enter"
             className={ isInvalid ? "error" : null }
