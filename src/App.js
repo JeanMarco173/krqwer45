@@ -30,10 +30,15 @@ export default function App () {
     }
   }
 
-  const handlePressTask = index => {
+  const handleSubmitTask = index => {
     let auxTasks = [...tasks]
     auxTasks[index].done = !auxTasks[index].done;
     setTasks(auxTasks)
+  }
+
+  const handlePressTask = (e, id)=> {
+    e.stopPropagation();
+    setTasks(tasks.filter( item => item.id !== id))
   }
 
   return (
@@ -41,7 +46,12 @@ export default function App () {
       <div className="list">
         <h3>Por hacer:</h3>
         <ul className="todo">
-          { tasks.map((task, index) => <li key={task.id} onClick={ () => handlePressTask(index)} className={ task.done ? "done" : null }>{task.name}</li>) }
+          { tasks.map((task, index) =>
+            <li key={task.id} onClick={() => handleSubmitTask(index)} className={ task.done ? "done" : null }>
+              {task.name}
+              <a onClick={e => handlePressTask(e, task.id)}>x</a>
+            </li>
+          )}
         </ul>
         <form onSubmit={handlePressEnter}>
           <input type="text" id="new-task"

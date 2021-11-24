@@ -19,6 +19,8 @@ ul {
 }
 
 ul li {
+  display: flex;
+  justify-content: space-between;
   color: #66665D;
   list-style-type: none;
   padding: 20px;
