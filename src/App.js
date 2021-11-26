@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 /// Modifica el componente para que se puedan agregar tareas, tachar y destacharlas y error de validacion en el input
 
 export default function App () {
 
-  const [ tasks, setTasks ] = useState([
-    { id: 1, name: "Sacar la ropa", done: false },
-    { id: 2, name: "Hacer la cama", done: true },
-    { id: 3, name: "Leer un rato", done: false }
-  ])
+  const [ tasks, setTasks ] = useState([])
   const [ newTask, setNewTask ] = useState('')
   const [ isInvalid, setIsInvalid ] = useState(false)
+
+  useEffect(() =>{
+    fetch('https://jsonplaceholder.typicode.com/todos')
+      .then(response => response.json())
+      .then(data => setTasks(data));
+  },[])
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -18,8 +20,8 @@ export default function App () {
       let auxTasks = [...tasks]
       const newTaskObj = {
         id: auxTasks[auxTasks.length - 1].id + 1,
-        name: newTask,
-        done: false
+        title: newTask,
+        completed: false
       }
       auxTasks.push(newTaskObj)
       setTasks(auxTasks)
@@ -32,7 +34,7 @@ export default function App () {
 
   const handleCheckTask = index => {
     let auxTasks = [...tasks]
-    auxTasks[index].done = !auxTasks[index].done;
+    auxTasks[index].completed = !auxTasks[index].completed;
     setTasks(auxTasks)
   }
 
@@ -47,8 +49,8 @@ export default function App () {
         <h3>Por hacer:</h3>
         <ul className="todo">
           { tasks.map((task, index) =>
-            <li key={task.id} onClick={() => handleCheckTask(index)} className={ task.done ? "done" : null }>
-              {task.name}
+            <li key={task.id} onClick={() => handleCheckTask(index)} className={ task.completed ? "done" : null }>
+              {task.title}
               <a onClick={e => handleDeleteTask(e, task.id)}>x</a>
             </li>
           )}
